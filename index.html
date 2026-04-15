@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman Kelulusan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a5f7a;
+            --accent-color: #ffd700;
+            --success-color: #28a745;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        /* Styling Countdown */
+        #countdown-section {
+            margin: 20px 0;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .timer-box {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 70px;
+        }
+
+        .timer-box span {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .timer-box label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* Hidden Search Section */
+        #search-section {
+            display: none;
+        }
+
+        input[type="text"] {
+            width: 60%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #resultArea {
+            margin-top: 2rem;
+            display: none;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--success-color);
+            background-color: #f0fff4;
+            text-align: left;
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .error-message { color: #dc3545; display: none; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SMA NEGERI 3 PURWOKERTO</h1>
+    <p>Sistem Informasi Kelulusan Kelas XII</p>
+</header>
+
+<div class="container">
+    
+    <div id="countdown-section">
+        <h2>Menuju Pengumuman Kelulusan</h2>
+        <p>Hasil akan dibuka secara otomatis pada waktu yang ditentukan:</p>
+        <div class="timer-container">
+            <div class="timer-box"><span id="days">00</span><label>Hari</label></div>
+            <div class="timer-box"><span id="hours">00</span><label>Jam</label></div>
+            <div class="timer-box"><span id="minutes">00</span><label>Menit</label></div>
+            <div class="timer-box"><span id="seconds">00</span><label>Detik</label></div>
+        </div>
+    </div>
+
+    <div id="search-section">
+        <h2>Cek Status Kelulusan</h2>
+        <input type="text" id="nisnInput" placeholder="Masukkan 10 Digit NISN" maxlength="10">
+        <br>
+        <button onclick="cariSiswa()">Lihat Hasil Kelulusan</button>
+        <div id="errorMessage" class="error-message">Data tidak ditemukan. Pastikan NISN benar.</div>
+
+        <div id="resultArea">
+            <h3>Selamat! Berikut Detail Kelulusan Anda:</h3>
+            <table width="100%">
+                <tr><td width="30%">Nama</td><td id="resNama"></td></tr>
+                <tr><td>NISN</td><td id="resNISN"></td></tr>
+                <tr><td>Kelas</td><td id="resKelas"></td></tr>
+                <tr><td>Status</td><td>: <span class="status-badge">LULUS</span></td></tr>
+            </table>
+            <button style="background-color: #dc3545;" onclick="generatePDF()">📥 Unduh Surat Keterangan (PDF)</button>
+        </div>
+    </div>
+
+</div>
+
+<div style="display:none;">
+    <div id="pdf-template" style="padding: 40px; color: black; font-family: 'Times New Roman';">
+        <div style="text-align: center; border-bottom: 3px double black; padding-bottom: 10px;">
+            <h3 style="margin:0;">PEMERINTAH PROVINSI JAWA TENGAH</h3>
+            <h2 style="margin:0;">SMA NEGERI 3 PURWOKERTO</h2>
+            <p style="margin:0;">Jl. Kampus No.1, Grendeng, Purwokerto</p>
+        </div>
+        <h3 style="text-align: center; text-decoration: underline; margin-top: 30px;">SURAT KETERANGAN LULUS</h3>
+        <p>Menerangkan bahwa siswa dengan data berikut:</p>
+        <table style="margin-left: 20px;">
+            <tr><td width="150">Nama</td><td id="pdfNama"></td></tr>
+            <tr><td>NISN</td><td id="pdfNISN"></td></tr>
+            <tr><td>Kelas</td><td id="pdfKelas"></td></tr>
+        </table>
+        <p>Dinyatakan: <strong>LULUS</strong> dari satuan pendidikan SMA Negeri 3 Purwokerto Tahun Ajaran 2025/2026.</p>
+        <div style="float: right; margin-top: 50px; text-align: center;">
+            Purwokerto, 16 Mei 2026<br>Kepala Sekolah,<br><br><br><br><strong>Drs. Nama Kepala Sekolah</strong>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+	
+	// 1. SET TANGGAL PENGUMUMAN DI SINI
+    // Format: "Month Day, Year HH:MM:SS"
+    const releaseDate = new Date("April 15, 2026 08:28:00").getTime();
+
+    const countdownInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = releaseDate - now;
+
+        // Hitung waktu
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Update tampilan countdown
+        document.getElementById("days").innerText = d < 10 ? "0"+d : d;
+        document.getElementById("hours").innerText = h < 10 ? "0"+h : h;
+        document.getElementById("minutes").innerText = m < 10 ? "0"+m : m;
+        document.getElementById("seconds").innerText = s < 10 ? "0"+s : s;
+
+        // Jika waktu habis
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown-section").style.display = "none";
+            document.getElementById("search-section").style.display = "block";
+        }
+    }, 1000);
+
+    
+
+    // Data Simulasi
+    // Ganti dengan URL yang kamu salin dari Google Apps Script tadi
+const API_URL = "https://script.google.com/macros/s/AKfycbzxM4LNnrAQZcxchx58HMSft-DUqSlMm9M02qFJBze9Oz22y01bqkWYL3LedRhJAdjJUg/exec";
+
+let dataKelulusan = [];
+
+// Fungsi untuk mengambil data dari Google Sheets saat halaman dimuat
+async function muatData() {
+    try {
+        const response = await fetch(API_URL);
+        dataKelulusan = await response.json();
+        console.log("Data berhasil dimuat dari Google Sheets");
+    } catch (error) {
+        console.error("Gagal mengambil data:", error);
+    }
+}
+
+// Jalankan fungsi muat data
+muatData();
+
+function cariSiswa() {
+    const input = document.getElementById('nisnInput').value;
+    
+    // Pastikan data sudah terisi sebelum mencari
+    if (dataKelulusan.length === 0) {
+        alert("Data sedang dimuat, mohon tunggu sebentar...");
+        return;
+    }
+
+    currentStudent = dataKelulusan.find(s => s.nisn === input);
+
+    if (currentStudent) {
+        document.getElementById('errorMessage').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        
+        document.getElementById('resNama').innerText = ": " + currentStudent.nama;
+        document.getElementById('resNISN').innerText = ": " + currentStudent.nisn;
+        document.getElementById('resKelas').innerText = ": " + currentStudent.Kelas;
+
+        rayakanKelulusan(); // Efek kembang api
+    } else {
+        document.getElementById('resultArea').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'block';
+    }
+}
+
+// Fungsi Spesifik untuk Efek Kembang Api
+function rayakanKelulusan() {
+    var duration = 5 * 1000; // Durasi 5 detik
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    var interval = setInterval(function() {
+      var timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      var particleCount = 50 * (timeLeft / duration);
+      // Ledakan kembang api di posisi acak (kiri dan kanan)
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
+}
+
+    function generatePDF() {
+        document.getElementById('pdfNama').innerText = ": " + currentStudent.nama;
+        document.getElementById('pdfNISN').innerText = ": " + currentStudent.nisn;
+        document.getElementById('pdfKelas').innerText = ": " + currentStudent.Kelas;
+        const element = document.getElementById('pdf-template');
+        html2pdf().from(element).set({ filename: 'SKL_' + currentStudent.nama + '.pdf' }).save();
+    }
+	
+	
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
