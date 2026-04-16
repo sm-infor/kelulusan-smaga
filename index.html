@@ -280,7 +280,7 @@ function rayakanKelulusan() {
     function generatePDF() {
         document.getElementById('pdfNama').innerText = ": " + currentStudent.nama;
         document.getElementById('pdfNISN').innerText = ": " + currentStudent.nisn;
-        document.getElementById('pdfKelas').innerText = ": " + currentStudent.Kelas;
+        document.getElementById('pdfKelas').innerText = ": " + currentStudent.kelas;
         const element = document.getElementById('pdf-template');
         html2pdf().from(element).set({ filename: 'SKL_' + currentStudent.nama + '.pdf' }).save();
     }
