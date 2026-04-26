@@ -145,6 +145,7 @@
                 <tr><td width="30%">Nama</td><td id="resNama"></td></tr>
                 <tr><td>NISN</td><td id="resNISN"></td></tr>
                 <tr><td>Kelas</td><td id="resKelas"></td></tr>
+				<tr><td>Downlad Dokumen Pengumuman</td><td id="resurl"></td></tr>
                 <tr><td>Status</td><td>: <span class="status-badge">LULUS</span></td></tr>
             </table>
             <button style="background-color: #dc3545;" onclick="generatePDF()">📥 Unduh Surat Keterangan (PDF)</button>
@@ -224,7 +225,7 @@
 
     // Data Simulasi
     // Ganti dengan URL yang kamu salin dari Google Apps Script tadi
-const API_URL = "https://script.google.com/macros/s/AKfycbzxM4LNnrAQZcxchx58HMSft-DUqSlMm9M02qFJBze9Oz22y01bqkWYL3LedRhJAdjJUg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyQl7YOIabJMHGbP3t1pH9Vg74aFu7Art6NOjIMoEEM9BREX-e48KxV_tuKvtJCxVqUGA/exec";
 
 let dataKelulusan = [];
 
@@ -260,6 +261,7 @@ function cariSiswa() {
         document.getElementById('resNama').innerText = ": " + currentStudent.nama;
         document.getElementById('resNISN').innerText = ": " + currentStudent.nisn;
         document.getElementById('resKelas').innerText = ": " + currentStudent.kelas;
+		document.getElementById('resurl').innerText = ": " + currentStudent.url;
 
         rayakanKelulusan(); // Efek kembang api
     } else {
