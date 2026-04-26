@@ -148,46 +148,10 @@
 				<tr><td>Downlad Dokumen Pengumuman</td><td id="resurl"></td></tr>
                 <tr><td>Status</td><td>: <span class="status-badge">LULUS</span></td></tr>
             </table>
-            <button style="background-color: #dc3545;" onclick="generatePDF()">📥 Unduh Surat Keterangan (PDF)</button>
+           
         </div>
     </div>
 
-</div>
-
-<div style="display:none;">
-    <div id="pdf-template">
-        <div class="kop-surat">
-            <h2 style="margin:0;">PEMERINTAH PROVINSI JAWA TENGAH</h2>
-            <h3 style="margin:0;">DINAS PENDIDIKAN</h3>
-            <h2 style="margin:0;">SEKOLAH MENENGAH ATAS NEGERI 3 PURWOKERTO</h2>
-            <p style="margin:0; font-size:12px;">Jalan Kamandaka Barat No. 3 Karangsalam Kidul, Kedungbanteng, Kode Pos 53152</p>
-			<p style="margin:0; font-size:12px;">Telepon 0281-639710 Laman www.sman3pwt.sch.id Pos-el smaga3pwt@gmail.com</p>
-        </div>
-        
-        <h3 style="text-align:center; text-decoration: underline;">SURAT KETERANGAN LULUS</h3>
-        <p style="text-align:center;">Nomor: 421/SKL/2026/001</p>
-
-        <p>Kepala Sekolah SMA Negeri 3 Purwokerto menerangkan bahwa:</p>
-        <table style="margin-left: 20px;">
-            <tr><td width="150px">Nama Lengkap</td><td id="pdfNama"></td></tr>
-            <tr><td>NISN</td><td id="pdfNISN"></td></tr>
-            <tr><td>Kelas</td><td id="pdfKelas"></td></tr>
-        </table>
-
-        <p>Berdasarkan hasil rapat pleno dewan guru tertanggal 15 Mei 2026, yang bersangkutan dinyatakan:</p>
-        <div style="text-align:center; font-size: 24px; font-weight: bold; border: 2px solid black; padding: 10px; margin: 20px auto; width: 200px;">
-            LULUS
-        </div>
-
-        <p>Demikian surat keterangan ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
-        
-        <div style="float: right; text-align: center; margin-top: 50px; width: 200px;">
-            Purwokerto, 16 Mei 2026<br>
-            Kepala Sekolah,<br><br><br><br>
-            <strong>Wasono Ardi Saputro,S.Pd., M.Pd</strong><br>
-            NIP. 19700910 199412 1 006
-        </div>
-    </div>
 </div>
 
 <script>
@@ -294,12 +258,7 @@ function rayakanKelulusan() {
     }, 250);
 }
 
-    function generatePDF() {
-        document.getElementById('pdfNama').innerText = ": " + currentStudent.nama;
-        document.getElementById('pdfNISN').innerText = ": " + currentStudent.nisn;
-        document.getElementById('pdfKelas').innerText = ": " + currentStudent.kelas;
-        const element = document.getElementById('pdf-template');
-        html2pdf().from(element).set({ filename: 'SKL_' + currentStudent.nama + '.pdf' }).save();
+   
     }
 	
 	
