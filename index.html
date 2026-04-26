@@ -145,14 +145,18 @@
                 <tr><td width="30%">Nama</td><td id="resNama"></td></tr>
                 <tr><td>NISN</td><td id="resNISN"></td></tr>
                 <tr><td>Kelas</td><td id="resKelas"></td></tr>
-				<tr><td>Downlad Dokumen Pengumuman</td><td id="resurl"></td></tr>
+				<tr><td>Download Dokumen Pengumuman</td><td id="resurl"></td></tr>
+				
                 <tr><td>Status</td><td>: <span class="status-badge">LULUS</span></td></tr>
+				
             </table>
-           
+
         </div>
     </div>
 
 </div>
+
+
 
 <script>
     
@@ -226,6 +230,7 @@ function cariSiswa() {
         document.getElementById('resNISN').innerText = ": " + currentStudent.nisn;
         document.getElementById('resKelas').innerText = ": " + currentStudent.kelas;
 		document.getElementById('resurl').innerText = ": " + currentStudent.url;
+		
 
         rayakanKelulusan(); // Efek kembang api
     } else {
@@ -259,7 +264,6 @@ function rayakanKelulusan() {
 }
 
    
-    }
 	
 	
 </script>
